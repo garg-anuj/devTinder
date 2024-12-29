@@ -6,3 +6,7 @@
 - Listen to port 3000
 - Write request handlers for/test, /hello
 - Insert nodemon and update scripts inside package.json
+- What are dependencies
+- What is the use of "-g" while npm install
+- Difference between ^ and ~ 
+-  Why Npm install
