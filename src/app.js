@@ -13,6 +13,20 @@ const PORT = 3000;
 
 const app = express();
 
+// !-----------------commit-4 Cannot GET /user  26:00 - 28:00 -------------------------------
+
+// nothing to show handler hi nhi hai ab jis last wala next() ke baad jisme
+// express expecting you another routeHandler
+
+app.use(
+  "/user",
+  (req, res, next) => next(),
+  (req, res, next) => next(),
+  (req, res, next) => next()
+);
+
+//
+
 // !-----------------commit-3 next()  11:00-20:00----------------------------------------------
 
 /* ek baar data client pr pauch gya fir hm dubara send kr rhe hai to wo
