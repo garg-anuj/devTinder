@@ -45,3 +45,4 @@
 - install mongoose lib
 - Connect Your application to Database "connectionUrl/devTinder"
 - call the connectDb function and connect to database before starting application on 3000port
+- create a userSchema & userModel
