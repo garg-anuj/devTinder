@@ -13,27 +13,37 @@ const PORT = 3000;
 
 const app = express();
 
-// !-----------------commit-5 handlers in array 31:00 - 33:00-------------------------------------------
-const routerHandlers = [
-  (req, res, next) => next(),
-  (req, res, next) => next(),
-  (req, res) => res.send("handler array  response"),
-];
-app.use("/user", routerHandlers);
+// !-----------------commit-5 Another Way To HAndle Multiple handlers 37:00 - 39:00 -----------
+
+app.use("/user", (req, res, next) => next());
+
+app.use("/user", (req, res, next) => next());
+
+app.use("/user", (req, res) => res.send("finally result of route handler"));
 
 //
 
-// !-----------------commit-4 Cannot GET /user  26:00 - 28:00 -------------------------------
+// !-----------------commit-5 handlers in array 31:00 - 33:00----------------------------------
+// const routerHandlers = [
+//   (req, res, next) => next(),
+//   (req, res, next) => next(),
+//   (req, res) => res.send("handler array  response"),
+// ];
+// app.use("/user", routerHandlers);
+
+//
+
+// !-----------------commit-4 Cannot GET /user  26:00 - 28:00 ---------------------------------
 
 // nothing to show handler hi nhi hai ab jis last wala next() ke baad jisme
 // express expecting you another routeHandler
 
-app.use(
-  "/user",
-  (req, res, next) => next(),
-  (req, res, next) => next(),
-  (req, res, next) => next()
-);
+// app.use(
+//   "/user",
+//   (req, res, next) => next(),
+//   (req, res, next) => next(),
+//   (req, res, next) => next()
+// );
 
 //
 
