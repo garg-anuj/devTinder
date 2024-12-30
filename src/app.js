@@ -13,11 +13,45 @@ const PORT = 3000;
 // ];
 
 const app = express();
+// !-----------------commit-9 Error Handling  1hr:27------------------------------------------
+
+// good way to use try catch
+
+// app.use("/", (err, req, res, next) => {
+//   // log your error message
+//   if (err) {
+//     res.status(500).send("something went wrong");
+//   }
+// });
+
+app.use("/getUserData", (req, res) => {
+  // Logic of DB call and get user data
+  // suppose it throw the error
+  // throw new Error("userData me error hai");
+
+  try {
+    // Logic of DB call and get user data
+    throw new Error("userData me error hai");
+    res.send("user data send");
+  } catch (err) {
+    res.status(500).send("something error in user data");
+  }
+});
+
+// app.use("/", (err, req, res, next) => {
+//   // log your error message
+//   if (err) {
+//     res.status(500).send("something went wrong");
+//   }
+// });
+
+//
+
 // !-----------------commit-8 refactor Middleware---------------------------------------------
 
-app.use("/admin/getAllData", isAdminAuthorized, (req, res) =>
-  res.send("all user data")
-);
+// app.use("/admin/getAllData", isAdminAuthorized, (req, res) =>
+//   res.send("all user data")
+// );
 
 //
 
