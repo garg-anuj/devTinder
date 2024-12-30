@@ -46,3 +46,6 @@
 - Connect Your application to Database "connectionUrl/devTinder"
 - call the connectDb function and connect to database before starting application on 3000port
 - create a userSchema & userModel
+- Create POST /Signup API to add data to database
+- Push some documents using API calls from postman
+- Error Handling using try, catch

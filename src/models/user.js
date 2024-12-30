@@ -29,3 +29,13 @@ const userSchema = new mongoose.Schema({
 const UserModel = new mongoose.model("User", userSchema);
 
 module.exports = UserModel;
+
+/* 
+    Mongoose model schema ke basis par MongoDB ki collections 
+    ke saath interact karta hai. Model ka use karke hum database
+     me documents create, read, update aur delete kar sakte hain."
+
+     or yeah kind of instances create krta hai schemaModel ke 
+     yaa unhe update / delete bhi kar skta hai 
+
+*/
