@@ -13,13 +13,34 @@ const PORT = 3000;
 
 const app = express();
 
+// !-----------------commit-6 Middleware response/route Handler 42:00-50:00--------------------
+
+// GET /user => it check all the app.xyz('matching') functions to send res
+// GET /user => middleware chain  ==> request handler
+
+// toh yeah sare /user route ko match krne ki kosis krega one by one
+
+app.use("/", (req, res, next) => {
+  // res.send("handle route here ");
+  next();
+});
+
+app.get(
+  "/user",
+  (req, res, next) => next(),
+  (req, res) => res.send("2nd handler of user"),
+  (req, res) => res.send("3nd handler of user")
+);
+
+//
+
 // !-----------------commit-5 Another Way To HAndle Multiple handlers 37:00 - 39:00 -----------
 
-app.use("/user", (req, res, next) => next());
+// app.use("/user", (req, res, next) => next());
 
-app.use("/user", (req, res, next) => next());
+// app.use("/user", (req, res, next) => next());
 
-app.use("/user", (req, res) => res.send("finally result of route handler"));
+// app.use("/user", (req, res) => res.send("finally result of route handler"));
 
 //
 
