@@ -5,23 +5,24 @@ const PORT = 3000;
 // 1 we can add multiple handlers inside it
 // 2 ek baar client ko request send krdi toh wo change nhi kar skte
 
-const app = express();
 // const arrRouterHandlers = [
 //   (req, res) => res.send("handler 1 response"),
 //   (req, res) => res.send("handler 2 response"),
 //   (req, res) => res.send("handler 3 response"),
 // ];
 
-// -------------------we can add multiple handlers----------------------------------
-// we can add multiple handlers inside it
+const app = express();
+
+// -------------------commit-1  Empty routeHandler 4:00 -------------------------------------------------
+
+/* if we did not send any  response  we keep this Empty routeHandler 
+then it will go infinite tk chlta rhega yeah kuch time tk  */
+
 app.use(
   "/user",
-  (req, res) => res.send("handler 1 response"),
-  (req, res) => res.send("handler 2 response"),
-  (req, res) => res.send("handler 3 response")
+  (req, res) => {},
+  (req, res) => {}
 );
-
-// ek baar client ko request send krdi toh wo change nhi kar skte
 
 app.listen(PORT, () => {
   console.log("server successfully  listening on the port " + PORT);
