@@ -13,6 +13,24 @@ const PORT = 3000;
 
 const app = express();
 
+// !-----------------commit-7 Use of MiddleWare 54:00-1hr:5-----------------------------------
+
+// Why we Need MiddleWare
+
+app.use("/admin", (req, res, next) => {
+  const authToken = "12345678";
+  // const isAdminAuthorized = authToken === "12345678";
+  if (authToken === "12345678") {
+    next();
+  } else {
+    res.status(401).send("You are not admin");
+  }
+});
+
+app.get("/admin/getAllData", (req, res) => res.send("all user data"));
+
+app.get("/admin/deleteUser", (req, res) => res.send("delete a user"));
+
 // !-----------------commit-6 Middleware response/route Handler 42:00-50:00--------------------
 
 // GET /user => it check all the app.xyz('matching') functions to send res
@@ -20,17 +38,17 @@ const app = express();
 
 // toh yeah sare /user route ko match krne ki kosis krega one by one
 
-app.use("/", (req, res, next) => {
-  // res.send("handle route here ");
-  next();
-});
+// app.use("/", (req, res, next) => {
+//   // res.send("handle route here ");
+//   next();
+// });
 
-app.get(
-  "/user",
-  (req, res, next) => next(),
-  (req, res) => res.send("2nd handler of user"),
-  (req, res) => res.send("3nd handler of user")
-);
+// app.get(
+//   "/user",
+//   (req, res, next) => next(),
+//   (req, res) => res.send("2nd handler of user"),
+//   (req, res) => res.send("3nd handler of user")
+// );
 
 //
 
