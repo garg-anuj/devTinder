@@ -1,4 +1,5 @@
 const express = require("express");
+const { isAdminAuthorized } = require("./middlewares/auth");
 const PORT = 3000;
 
 //! FACTS
@@ -12,24 +13,31 @@ const PORT = 3000;
 // ];
 
 const app = express();
+// !-----------------commit-8 refactor Middleware---------------------------------------------
 
-// !-----------------commit-7 Use of MiddleWare 54:00-1hr:5-----------------------------------
+app.use("/admin/getAllData", isAdminAuthorized, (req, res) =>
+  res.send("all user data")
+);
+
+//
+
+// !-----------------commit-7 Use of MiddleWare 1hr:13 - 1hr:23--------------------------------
 
 // Why we Need MiddleWare
 
-app.use("/admin", (req, res, next) => {
-  const authToken = "12345678";
-  // const isAdminAuthorized = authToken === "12345678";
-  if (authToken === "12345678") {
-    next();
-  } else {
-    res.status(401).send("You are not admin");
-  }
-});
+// app.use("/admin", (req, res, next) => {
+//   const authToken = "12345678";
+//   // const isAdminAuthorized = authToken === "12345678";
+//   if (authToken === "12345678") {
+//     next();
+//   } else {
+//     res.status(401).send("You are not admin");
+//   }
+// });
 
-app.get("/admin/getAllData", (req, res) => res.send("all user data"));
+// app.get("/admin/getAllData", (req, res) => res.send("all user data"));
 
-app.get("/admin/deleteUser", (req, res) => res.send("delete a user"));
+// app.get("/admin/deleteUser", (req, res) => res.send("delete a user"));
 
 // !-----------------commit-6 Middleware response/route Handler 42:00-50:00--------------------
 
