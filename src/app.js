@@ -13,6 +13,16 @@ const PORT = 3000;
 
 const app = express();
 
+// !-----------------commit-5 handlers in array 31:00 - 33:00-------------------------------------------
+const routerHandlers = [
+  (req, res, next) => next(),
+  (req, res, next) => next(),
+  (req, res) => res.send("handler array  response"),
+];
+app.use("/user", routerHandlers);
+
+//
+
 // !-----------------commit-4 Cannot GET /user  26:00 - 28:00 -------------------------------
 
 // nothing to show handler hi nhi hai ab jis last wala next() ke baad jisme
