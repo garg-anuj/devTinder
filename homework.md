@@ -26,6 +26,7 @@
 - Reading the query params in the routes
 - Reading the dynamic  routes
 
+
 <!-- Ep-5 -->
 - Multiple Route Handlers - play with the code
 - next()
@@ -39,7 +40,6 @@
 - Error Handling using try{} catch
 
 
-
 <!-- Ep-6 Database, Schema & Model Mongoose -->
 - create free cluster
 - install mongoose lib
@@ -50,4 +50,18 @@
 - Push some documents using API calls from postman
 - Error Handling using try, catch
 
+
 <!-- Ep-7 Diving into the apis -->
+- js object vs JSON (difference)
+- Add the express, json middleware to your app
+- Make Your signup API dynamic to recive data  from the end user
+- User, findOne with duplicate email ids, which object return first
+- API - GET user by email
+- API - Feed API GET/feed - get all the users from the database
+- API - GET user by ID
+- Create a delete user API
+- Difference between PATCH and PUT
+- API - Update a user
+- Explore the Mongoose Documents for Model methods
+- what are option in a findOneUpdate, explore more about it
+- API - update the user with email id
