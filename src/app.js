@@ -32,6 +32,26 @@ app.get("/users", async (req, res) => {
   }
 });
 
+// !------------------------------commit-2 delete method 57:00- 1hr:05------------------------------------
+app.delete("/del-user", async (req, res) => {
+  // const users = await User.findOne(req.body);
+  const userId = req.body.userId;
+
+  try {
+    // const user = await User.deleteOne({ _id: userId });
+    // const user = await User.findOneAndDelete({ _id: userId });
+    const user = await User.findByIdAndDelete(userId);
+
+    if (!user) {
+      res.status(404).send("Existing User Not Found");
+    } else {
+      res.send(user);
+    }
+  } catch (err) {
+    res.status(400).send("Something is wrong while deleting user");
+  }
+});
+
 //  pehle dbConnect kro then app ko listen kro kisi port pr
 connectDB()
   .then(() => {
