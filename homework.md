@@ -65,3 +65,17 @@
 - Explore the Mongoose Documents for Model methods
 - what are option in a findOneUpdate, explore more about it
 - API - update the user with email id
+
+
+<!-- Ep-8 Data sanitization & schema validations -->
+
+- Explore schemaType options from the documentation
+- add required, unique, lowercase, min, minLength, trim
+- Add default 
+- Create a custom validate function for gender
+- Improve the DB schema - PUT all appropriate validations in each field in schema
+- Add timestamp to the userSchema
+- AddAPI level validations on patch request & Signup post api
+- DAta sanitization - Add Api validation for each field
+- Install validator
+- Explore validator library function and use validator functions for password, email, linksUrl

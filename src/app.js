@@ -1,3 +1,4 @@
+// ! Never Trust req.body isme kuch bhi vurnable aa skta hai
 const express = require("express");
 const PORT = 3000;
 const app = express();
@@ -54,23 +55,50 @@ app.delete("/del-user", async (req, res) => {
 
 // !------------------------------commit-3 patch method 1hr:05 - 1hr:05-----------------------------------
 
-app.patch("/update-user", async (req, res) => {
+app.patch("/update-user/:userId", async (req, res) => {
+  const ALLOW_UPDATES = [
+    "firstName",
+    "lastName",
+    "password",
+    "age",
+    "gender",
+    "skills",
+  ];
+
   // const users = await User.findOne(req.body);
-  const userId = req.body._id;
+  // const userId = req.body._id;
+  const userId = req.params.userId;
   const updatedUserData = req.body;
 
+  const isFieldChangeable = Object.keys(updatedUserData).every((field) =>
+    ALLOW_UPDATES.includes(field)
+  );
+
   try {
+    if (!isFieldChangeable) {
+      throw new Error("updates are not allowed ");
+    }
+
+    if (updatedUserData?.skills.length >= 10) {
+      throw new Error("you can add 10 skills only");
+    }
+
     const isUserExist = await User.findById(userId);
+
     if (!isUserExist) {
       res.status(404).send("Existing User Not Found To Update");
     } else {
       await User.findByIdAndUpdate({ _id: userId }, updatedUserData, {
         returnDocument: "before",
+        runValidators: true,
       });
+
       res.send("user Update successfully");
     }
   } catch (err) {
-    res.status(400).send("Something is wrong while deleting user");
+    res
+      .status(400)
+      .send("Something is wrong while updating user " + err.message);
   }
 });
 
