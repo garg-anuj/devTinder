@@ -79,3 +79,8 @@
 - DAta sanitization - Add Api validation for each field
 - Install validator
 - Explore validator library function and use validator functions for password, email, linksUrl
+
+<!-- Ep-9  -->
+Validate data in SignUp API
+Install bcrypt package
+Create Password using bcrypt.hash & save the user is encrypted password

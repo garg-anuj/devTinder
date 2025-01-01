@@ -4,17 +4,30 @@ const PORT = 3000;
 const app = express();
 const { connectDB } = require("./config/database");
 const User = require("./models/user");
+const { validateSignUpData } = require("./utils/validation");
+const bcrypt = require("bcrypt");
 
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-  const userObj = req.body;
+  // const userObj = req.body; // don't send complete req.body  in db Send what needed manually
+  const { firstName, lastName, password, emailId } = req.body;
+
   try {
-    const user = new User(userObj); //creating a new instance of user model
+    validateSignUpData(req); // if fields are not validate it will throw the error
+    const hashPassword = await bcrypt.hash(password, 10);
+    console.log(hashPassword);
+    // const user = new User(userObj); //creating a new instance of user model
+    const user = new User({
+      firstName,
+      lastName,
+      password: hashPassword,
+      emailId,
+    });
     await user.save();
     res.send(user);
   } catch (err) {
-    res.status(400).send("Error Saving the user " + err.message);
+    res.status(400).send("Error while signup " + err.message);
   }
 });
 // !--------------------------- 26:00 - 36:00---------------------------------
@@ -23,6 +36,7 @@ app.get("/users", async (req, res) => {
   try {
     // const users = await User.findOne(req.body);
     // const users = await User.findOne({emailId});
+
     const users = await User.find({});
     if (users.length === 0) {
       res.status(404).send("No users found");

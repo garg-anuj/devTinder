@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       minLength: 8,
-      maxLength: 55,
+      maxLength: 555,
       validate(value) {
         if (!validator.isStrongPassword(value)) {
           throw new Error("Not A Strong Password " + value);
@@ -82,7 +82,7 @@ const userSchema = new mongoose.Schema(
     },
     skills: {
       type: [String],
-      default: null,
+      // default: null,
       //  we can do this from our api logics/ using route handlers
       validate: {
         validator(skillsArr) {
