@@ -16,7 +16,6 @@ app.post("/signup", async (req, res) => {
   try {
     validateSignUpData(req); // if fields are not validate it will throw the error
     const hashPassword = await bcrypt.hash(password, 10);
-    console.log(hashPassword);
     // const user = new User(userObj); //creating a new instance of user model
     const user = new User({
       firstName,
@@ -28,6 +27,29 @@ app.post("/signup", async (req, res) => {
     res.send(user);
   } catch (err) {
     res.status(400).send("Error while signup " + err.message);
+  }
+});
+
+app.post("/login", async (req, res) => {
+  const { emailId, password } = req.body;
+  try {
+    const isUserExist = await User.findOne({ emailId }).exec();
+    if (!isUserExist) {
+      res.send("Invalid Credentials");
+    } else {
+      const hashPassword = isUserExist.password;
+      bcrypt.compare(password, hashPassword, (err, isMatch) => {
+        if (err) {
+          throw new Error("Error comparing hash:");
+        } else if (isMatch) {
+          res.send("You can Login The plain text matches the hash!");
+        } else {
+          res.send("Wrong password plz check");
+        }
+      });
+    }
+  } catch (err) {
+    res.status(400).send("Error while login " + err.message);
   }
 });
 // !--------------------------- 26:00 - 36:00---------------------------------
