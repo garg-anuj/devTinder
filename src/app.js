@@ -54,10 +54,14 @@ app.post("/login", async (req, res) => {
         if (err) {
           throw new Error("Error comparing hash:");
         } else if (isMatch) {
-          const token = jwt.sign({ _id: isUserExist._id }, PRIVATE_KEY);
+          const token = jwt.sign({ _id: isUserExist._id }, PRIVATE_KEY, {
+            expiresIn: "1d",
+          });
 
           // Adds the token to cookies ans send the response back to user
-          res.cookie("myTokenKey", token);
+          res.cookie("myTokenKey", token, {
+            expires: new Date(Date.now() + 24 * 3600000),
+          });
           res.send("You can Login The plain text matches the hash!");
         } else {
           res.send("Wrong password plz check");
