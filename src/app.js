@@ -68,25 +68,42 @@ app.post("/login", async (req, res) => {
     res.status(400).send("Error while login " + err.message);
   }
 });
-app.get("/profile", async (req, res) => {
-  const cookie = req.cookies.myTokenKey;
-  //if(checkCookies)then we will validate / authenticated the token if the token is valid the we will allow to access the data
 
+// !------------------------------------------------------------------------------
+
+// app.get("/profile", async (req, res) => {
+//   const cookie = req.cookies.myTokenKey;
+//   //if(checkCookies)then we will validate / authenticated the token if the token is valid the we will allow to access the data
+
+//   try {
+//     if (!cookie) {
+//       throw new Error("Session Has Been Expired Login Again");
+//     } else {
+//       const decodedToken = jwt.verify(cookie, PRIVATE_KEY);
+//       const user = await User.findOne({ _id: decodedToken._id }).exec();
+//       console.log(user);
+//       res.send(user);
+//     }
+//   } catch (err) {
+//     throw new Error("Something is wrong " + err.message);
+//   }
+// });
+
+//
+
+// !--------------------Using userAuth-Middleware in /profile----------------------------------
+
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    if (!cookie) {
-      throw new Error("Session Has Been Expired Login Again");
-    } else {
-      const decodedToken = jwt.verify(cookie, PRIVATE_KEY);
-      const user = await User.findOne({ _id: decodedToken._id }).exec();
-      console.log(user);
-      res.send(user);
-    }
+    res.send(req.users);
   } catch (err) {
     throw new Error("Something is wrong " + err.message);
   }
 });
 
-// !----------------Feed Using userAuth-Middleware------------------
+//
+
+// !--------------------Feed Using userAuth-Middleware-----------------------------------------
 
 /*  
    abhi me chata huu ki login user /feed bhi access kar paye lekin hme same 
@@ -104,6 +121,8 @@ app.get("/feed", userAuth, async (req, res) => {
   }
 });
 
+//
+
 // !--------------------------- 26:00 - 36:00---------------------------------
 app.get("/users", async (req, res) => {
   // const emailId = req.body.emailId
@@ -120,6 +139,8 @@ app.get("/users", async (req, res) => {
     res.status(400).send("Error get users " + err.message);
   }
 });
+
+//
 
 // !------------------------------commit-2 delete method 57:00- 1hr:05------------------------------------
 app.delete("/del-user", async (req, res) => {
