@@ -1,3 +1,6 @@
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+
 const isAdminAuthorized = (req, res, next) => {
   const authToken = "12345678";
   // const isAdminAuthorized = authToken === "12345678";
@@ -8,4 +11,29 @@ const isAdminAuthorized = (req, res, next) => {
   }
 };
 
-module.exports = { isAdminAuthorized };
+const PRIVATE_KEY = "HELLO";
+const userAuth = async (req, res, next) => {
+  try {
+    const cookie = req.cookies.myTokenKey;
+    if (!cookie) {
+      throw new Error("you have to login / signUp");
+    }
+
+    const decodedObj = jwt.verify(cookie, PRIVATE_KEY);
+    const { _id } = decodedObj;
+
+    const user = await User.findById(_id);
+    if (!user) {
+      throw new Error("User No Found");
+    }
+
+    req.users = user; // iise hm req.user ke anadar data store karwa denge jiise ki nextRouteHandler me hm yeah data get kar paye cookie kaa decoded data
+    // req.users = isUserTokenValid; yeah bhi kar skte hai
+    // req.newToken = isUserTokenValid;
+    next();
+  } catch (err) {
+    res.send("Something is Wrong " + err.message);
+  }
+};
+
+module.exports = { isAdminAuthorized, userAuth };

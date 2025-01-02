@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const { connectDB } = require("./config/database");
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
+const { userAuth } = require("./middlewares/auth");
 
 const bcrypt = require("bcrypt");
 
@@ -82,6 +83,24 @@ app.get("/profile", async (req, res) => {
     }
   } catch (err) {
     throw new Error("Something is wrong " + err.message);
+  }
+});
+
+// !----------------Feed Using userAuth-Middleware------------------
+
+/*  
+   abhi me chata huu ki login user /feed bhi access kar paye lekin hme same 
+   code agin again likhna hoga jwt verrify ke liye har route pr tb hmare 
+   routeHandler work krenge iske liye hm yeah jwt vrify kaa logic ek middleware 
+   me daal denger next() jisse verfiy hone ke badd routeHandler work krega 
+
+*/
+
+app.get("/feed", userAuth, async (req, res) => {
+  try {
+    res.send("You can check Feed");
+  } catch (err) {
+    res.status(400).send("Error while fetching feed " + err.message);
   }
 });
 
