@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const jwt = require("jsonwebtoken");
 // schema level validation
 //  route handler validation
 //! 23:00 - 40:00
@@ -99,6 +100,23 @@ const userSchema = new mongoose.Schema(
 
 //  schema tell you what type of data user storing data into your database
 
+const PRIVATE_KEY = "HELLO";
+
+userSchema.methods.getJWT = async function () {
+  // const user = this;
+  const token = jwt.sign({ _id: this._id }, PRIVATE_KEY, {
+    expiresIn: "1d",
+  });
+
+  return token;
+};
+
+userSchema.methods.validatePassword = async function (passwordByUser) {
+  // const user  = this
+  const passwordHash = this.password;
+  const isPasswordValid = await bcrypt.compare(passwordByUser, passwordHash);
+  return isPasswordValid;
+};
 const UserModel = new mongoose.model("User", userSchema);
 
 module.exports = UserModel;

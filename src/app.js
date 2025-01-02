@@ -17,7 +17,6 @@ app.use(cookieParser());
   !yeah hm use nhi krenge toh hme always undefined ayega 
   !server pr jb hm client se cookie get krenge
 */
-const PRIVATE_KEY = "HELLO";
 
 app.post("/signup", async (req, res) => {
   // const userObj = req.body; // don't send complete req.body  in db Send what needed manually
@@ -50,13 +49,13 @@ app.post("/login", async (req, res) => {
       res.send("Invalid Credentials");
     } else {
       const hashPassword = isUserExist.password;
-      bcrypt.compare(password, hashPassword, (err, isMatch) => {
+      // const isPasswordValid = await  isUserExist.validatePassword(password)
+      bcrypt.compare(password, hashPassword, async (err, isMatch) => {
         if (err) {
           throw new Error("Error comparing hash:");
         } else if (isMatch) {
-          const token = jwt.sign({ _id: isUserExist._id }, PRIVATE_KEY, {
-            expiresIn: "1d",
-          });
+          // const token = jwt.sign({ _id: isUserExist._id }, PRIVATE_KEY, {expiresIn: "1d"});
+          const token = await isUserExist.getJWT(); //offloaded this logic into the schema
 
           // Adds the token to cookies ans send the response back to user
           res.cookie("myTokenKey", token, {
