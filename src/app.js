@@ -3,6 +3,7 @@ const express = require("express");
 const PORT = 3000;
 const app = express();
 const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 const { connectDB } = require("./config/database");
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
@@ -40,6 +41,7 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { emailId, password } = req.body;
+  // token = jwt.sign({ foo: 'bar' }, privateKey, { algorithm: 'RS256' })
   try {
     const isUserExist = await User.findOne({ emailId }).exec();
 
@@ -51,7 +53,10 @@ app.post("/login", async (req, res) => {
         if (err) {
           throw new Error("Error comparing hash:");
         } else if (isMatch) {
-          res.cookie("myCookies", "mereKeycode");
+          const token = jwt.sign({ _id: isUserExist._id }, PRIVATE_KEY);
+
+          // Adds the token to cookies ans send the response back to user
+          res.cookie("myTokenKey", token);
           res.send("You can Login The plain text matches the hash!");
         } else {
           res.send("Wrong password plz check");
@@ -62,14 +67,24 @@ app.post("/login", async (req, res) => {
     res.status(400).send("Error while login " + err.message);
   }
 });
-app.get("/profile", (req, res) => {
-  const checkCookies = req.cookies;
-  console.log(checkCookies);
-  if (checkCookies) {
-    //  then we will validate / authenticated the token if the token is valid the we will allow to access the data
+app.get("/profile", async (req, res) => {
+  const cookie = req.cookies.myTokenKey;
+  //if(checkCookies)then we will validate / authenticated the token if the token is valid the we will allow to access the data
+
+  try {
+    if (!cookie) {
+      throw new Error("Session Has Been Expired Login Again");
+    } else {
+      const decodedToken = jwt.verify(cookie, PRIVATE_KEY);
+      const user = await User.findOne({ _id: decodedToken._id }).exec();
+      console.log(user);
+      res.send(user);
+    }
+  } catch (err) {
+    throw new Error("Something is wrong " + err.message);
   }
-  res.send(`check ${checkCookies}`);
 });
+
 // !--------------------------- 26:00 - 36:00---------------------------------
 app.get("/users", async (req, res) => {
   // const emailId = req.body.emailId
