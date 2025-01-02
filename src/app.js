@@ -2,12 +2,20 @@
 const express = require("express");
 const PORT = 3000;
 const app = express();
+const cookieParser = require("cookie-parser");
 const { connectDB } = require("./config/database");
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
+
 const bcrypt = require("bcrypt");
 
 app.use(express.json());
+app.use(cookieParser());
+/*
+  !yeah hm use nhi krenge toh hme always undefined ayega 
+  !server pr jb hm client se cookie get krenge
+*/
+const PRIVATE_KEY = "HELLO";
 
 app.post("/signup", async (req, res) => {
   // const userObj = req.body; // don't send complete req.body  in db Send what needed manually
@@ -34,6 +42,8 @@ app.post("/login", async (req, res) => {
   const { emailId, password } = req.body;
   try {
     const isUserExist = await User.findOne({ emailId }).exec();
+    res.cookie("myCookies", "mereKeycode");
+
     if (!isUserExist) {
       res.send("Invalid Credentials");
     } else {
@@ -51,6 +61,11 @@ app.post("/login", async (req, res) => {
   } catch (err) {
     res.status(400).send("Error while login " + err.message);
   }
+});
+app.get("/profile", (req, res) => {
+  const checkCookies = req.cookies;
+  console.log(checkCookies);
+  res.send(`check ${checkCookies}`);
 });
 // !--------------------------- 26:00 - 36:00---------------------------------
 app.get("/users", async (req, res) => {
