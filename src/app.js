@@ -42,7 +42,6 @@ app.post("/login", async (req, res) => {
   const { emailId, password } = req.body;
   try {
     const isUserExist = await User.findOne({ emailId }).exec();
-    res.cookie("myCookies", "mereKeycode");
 
     if (!isUserExist) {
       res.send("Invalid Credentials");
@@ -52,6 +51,7 @@ app.post("/login", async (req, res) => {
         if (err) {
           throw new Error("Error comparing hash:");
         } else if (isMatch) {
+          res.cookie("myCookies", "mereKeycode");
           res.send("You can Login The plain text matches the hash!");
         } else {
           res.send("Wrong password plz check");
@@ -65,6 +65,9 @@ app.post("/login", async (req, res) => {
 app.get("/profile", (req, res) => {
   const checkCookies = req.cookies;
   console.log(checkCookies);
+  if (checkCookies) {
+    //  then we will validate / authenticated the token if the token is valid the we will allow to access the data
+  }
   res.send(`check ${checkCookies}`);
 });
 // !--------------------------- 26:00 - 36:00---------------------------------
