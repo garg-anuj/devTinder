@@ -1,5 +1,8 @@
 const express = require("express");
+const validator = require("validator");
+
 const { userAuth } = require("../middlewares/auth");
+const User = require("../models/user");
 const profileRouter = express.Router();
 
 // !------------------------------------------------------------------------------
@@ -34,4 +37,60 @@ profileRouter.get("/profile", userAuth, async (req, res) => {
   }
 });
 
+profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
+  try {
+    await validateProfileEditData(req);
+    const loggedUser = req.users; // yeah hme userAuth middleware se mil rha hai
+
+    // !METHOD 1
+    // const loggedUserUpdated = await User.findByIdAndUpdate(loggedUser._id,req.body,{runValidators: true  });
+    //   // runValidators is important hai existing user ke liye bhi schemaLevel validation allow krta hai
+    // res.send(loggedUserUpdated);
+
+    // !METHOD 2
+    Object.keys(loggedUser).forEach(
+      (key) => (loggedUser[key] = req.body[key] || loggedUser[key])
+    );
+    await loggedUser.save();
+
+    res.send(loggedUser);
+  } catch (err) {
+    res.send("Error Wile Edit Profile " + err.message);
+  }
+});
+
 module.exports = profileRouter;
+
+async function validateProfileEditData(req) {
+  const EDITABLE_FIELDS = [
+    "firstName",
+    "lastName",
+    "age",
+    "gender",
+    "photoUrl",
+    "skills",
+  ];
+  const user = req.body;
+  const isFieldEditable = Object.keys(user).every((currentField) => {
+    return EDITABLE_FIELDS.includes(currentField);
+  });
+  if (!isFieldEditable) {
+    throw new Error("Invalid Edit Request");
+  }
+  const { firstName, lastName, age, gender, skills } = req.body;
+
+  if (!firstName || !lastName) {
+    throw new Error("First Name and Last Name are required");
+  } else if (firstName.length < 4 || firstName.length > 55) {
+    throw new Error("First Name should be between 5 - 70 words");
+  } else if (age <= 14 || age >= 70) {
+    throw new Error("age should be between 14 to 70 ");
+  } else if (skills.length > 10) {
+    throw new Error("Skills should be between 1 to 10 ");
+  }
+  //   else if (!validator.isURL(photoUrl)) {
+  //     throw new Error("Invalid Photo URL");
+  //   }
+  //   return isFieldEditable;
+  return user;
+}
