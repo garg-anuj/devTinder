@@ -7,9 +7,10 @@ const { connectDB } = require("./config/database");
 const { userAuth } = require("./middlewares/auth");
 
 const authRouter = require("./routes/auth");
-const userRouter = require("./routes/testUser");
+const testUserRouter = require("./routes/testUser");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
+const userRouter = require("./routes/user");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -19,9 +20,10 @@ app.use(cookieParser());
 */
 
 app.use("/", authRouter);
-app.use("/", userRouter);
+app.use("/", testUserRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
+app.use("/", userRouter);
 
 // !--------------------Feed Using userAuth-Middleware-----------------------------------------
 

@@ -28,7 +28,7 @@ requestRouter.post(
         throw new Error("Invalid status");
       }
 
-      if (fromUserId === toUserId) {
+      if (fromUserId.toString() === toUserId.toString()) {
         throw new Error("you cant request to your self");
       }
 
@@ -39,7 +39,7 @@ requestRouter.post(
       const toUserFirstName = isRequestUserValid.firstName;
       const fromUserFirstName = req.users.firstName;
 
-      const isAlreadyConnectionExist = await ConnectionRequestsModel({
+      const isAlreadyConnectionExist = await ConnectionRequestsModel.findOne({
         $or: [
           { fromUserId, toUserId },
           { fromUserId: toUserId, toUserId: fromUserId },
@@ -63,6 +63,31 @@ requestRouter.post(
         message: "request has been send successfully",
         data: connectionRequest,
       });
+    } catch (err) {
+      res.send("ERROR " + err.message);
+    }
+  }
+);
+
+// ! note down the Corner Cases
+
+/* 
+    1 yeah joh intrested log hai unki api ayegi one by one krke unhe accept / reject karna hai 
+    2 finde kese krenge requestId se 
+    3 ha hm hm toUser honge  means (logo ne hmme intresetd dikaya hai fromUserId se toUserId se)
+      Ex: - Dhoni(fromUserId) ne kohli(toUserId) ko request send ki 
+    4 toh request accept krne ke liye hme toUserId(kohli) ko login krna hoga wha pr wo dekh skta hai 
+      kon usme interested hai   
+    5  connectionRequest ke collection me joh intreseted hai uski id(fromUserId) mil jayegi us
+       id se hm user ki name - details populate karwa lenge
+    6 [accepted, rejected] (validation ) yhi do status option aa skte hai     
+*/
+
+requestRouter.post(
+  "/request/send/:status/:requestId",
+  userAuth,
+  async (req, res) => {
+    try {
     } catch (err) {
       res.send("ERROR " + err.message);
     }

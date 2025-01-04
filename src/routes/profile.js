@@ -47,10 +47,11 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     //   // runValidators is important hai existing user ke liye bhi schemaLevel validation allow krta hai
     // res.send(loggedUserUpdated);
 
-    // !METHOD 2
+    // !METHOD 2  //Not underStand this MEthod not working properly for me
     Object.keys(loggedUser).forEach(
       (key) => (loggedUser[key] = req.body[key] || loggedUser[key])
     );
+
     await loggedUser.save();
 
     res.send(loggedUser);
