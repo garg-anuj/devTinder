@@ -102,14 +102,29 @@ Compare password and throw errors if email or password is invalid
 
 
 <!-- Ep-11 Diving into the APIs and express Router -->
-Explore tinder APIS's
-create a list of all API you can think of in Dev Tinder
-Group multiple routes under respective routers
-Read documentation for express.Router
-Create routes folder for managing auth profile, request routers
-Create authRouter, profileRouter , requestRouter
-Import these routers in app.js
-Create POST /logout API
-Create PATCH /profile/edit
-Create PATCH /profile/password API => forget password API
-Make you validate all data in every POST, PATCH apis
+- Explore tinder APIS's
+- create a list of all API you can think of in Dev Tinder
+- Group multiple routes under respective routers
+- Read documentation for express.Router
+- Create routes folder for managing auth profile, request routers
+- Create authRouter, profileRouter , requestRouter
+- Import these routers in app.js
+- Create POST /logout API
+- Create PATCH /profile/edit
+- Create PATCH /profile/password API => forget password API
+- Make you validate all data in every POST, PATCH apis
+
+
+<!-- Ep-12 Logical DB Query & Compound indexes -->
+
+create connection requestSchema
+Send connection Request Api
+proper validation of data 
+Think about all the corner cases
+$or query $and query in mongoose/mongoDb
+schema.pre("save") function
+Read more about indexed in mongoDb
+why do we need indexes DB?
+what is the advantage and disadvantage of creating?
+Read this article about compound indexes
+Always Think about CORNER cases
