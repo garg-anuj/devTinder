@@ -1,6 +1,7 @@
 const express = require("express");
 const ConnectionRequestsModel = require("../models/connectionRequest");
 const { userAuth } = require("../middlewares/auth");
+const UserModel = require("../models/user");
 const userRouter = express.Router();
 
 // ! Cornaer cases to find connections
@@ -69,4 +70,79 @@ userRouter.get("/user/requests/review", userAuth, async (req, res) => {
   }
 });
 
+// !Corner cases :- isme hme feed pr joh user ayenge wo dikhana hai
+/* 
+    kind of friend suggestion
+    ["interested", "ignored", "accepted", "rejected"] yeah wale log hai wo show nhi 
+    hoga ,  member show nhi honge or khudh wo users hai show nhi hoga
+
+    what we will do for this ?
+    logged userKi id lenge or connectIonRequest ke colloection me findOut krenge 
+    un logo ko jinhe show nhi karwana   ["interested", "ignored", "accepted", "rejected"]
+
+    then db me se hiderUsers ke alawa sare dikha denge 15 -20 krke
+
+*/
+
+userRouter.get("/user/feed", userAuth, async (req, res) => {
+  const DEFAULT_PAGE = 1;
+  const DEFAULT_PER_PAGE_LIMIT = 10;
+  const DEFAULT_MAX_LIMIT = 50;
+  try {
+    const loggedUser = req.users._id;
+    let pageNo = parseInt(req.query.page) || DEFAULT_PAGE;
+    let pageLimit = parseInt(req.query.limit) || DEFAULT_PER_PAGE_LIMIT; //validate otherWise hacker can misuse this limit size
+    const skip = (pageNo - 1) * pageLimit; // skip 0,
+
+    if (pageLimit > DEFAULT_MAX_LIMIT) pageLimit = DEFAULT_PER_PAGE_LIMIT;
+    if (pageNo < 1) pageNo = DEFAULT_PAGE;
+
+    const excludesConnections = await ConnectionRequestsModel.find({
+      $or: [{ fromUserId: loggedUser }, { toUserId: loggedUser }],
+      status: { $in: ["interested", "ignored", "accepted", "rejected"] },
+    });
+
+    const hiddenUsers = hideUsers(excludesConnections, loggedUser);
+
+    const feedUsers = await UserModel.find({
+      _id: { $nin: Array.from(hiddenUsers) },
+    })
+      .populate(POPULATE_FIELDS)
+      .skip(skip)
+      .limit(pageLimit)
+      .lean();
+
+    const totalUsers = await UserModel.countDocuments({
+      _id: { $nin: Array.from(hiddenUsers) },
+    });
+
+    res.json({
+      success: true,
+      allUsers: feedUsers,
+      pagination: {
+        currentPage: pageNo,
+        totalPage: Math.ceil(totalUsers / pageLimit),
+        limit: pageLimit,
+        totalUsers,
+      },
+    });
+  } catch (err) {
+    res.json({
+      success: false,
+      message: "Error " + err.message,
+    });
+  }
+});
+
 module.exports = userRouter;
+
+function hideUsers(excludesConnectionList, loggedUser) {
+  const hiddenUsers = new Set();
+  excludesConnectionList.forEach((connection) => {
+    hiddenUsers.add(connection.fromUserId.toString());
+    hiddenUsers.add(connection.toUserId.toString());
+    hiddenUsers.add(loggedUser.toString());
+  });
+
+  return hiddenUsers;
+}

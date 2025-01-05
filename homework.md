@@ -117,23 +117,31 @@ Compare password and throw errors if email or password is invalid
 
 <!-- Ep-12 Logical DB Query & Compound indexes -->
 
-create connection requestSchema
-Send connection Request Api
-proper validation of data 
-Think about all the corner cases
-$or query $and query in mongoose/mongoDb
-schema.pre("save") function
-Read more about indexed in mongoDb
-why do we need indexes DB?
-what is the advantage and disadvantage of creating?
-Read this article about compound indexes
-Always Think about CORNER cases
+- create connection requestSchema
+- Send connection Request Api
+- proper validation of data 
+- Think about all the corner cases
+- $or query $and query in mongoose/mongoDb
+- schema.pre("save") function
+- Read more about indexed in mongoDb
+- why do we need indexes DB?
+- what is the advantage and disadvantage of creating?
+- Read this article about compound indexes
+- Always Think about CORNER cases
 
 
 <!-- Ep-13 Ref, Populate & Thought Process of writing APIs -->
 
-write code with proper validations for the POST /request/review/:status/:requestId
-Thought process -POST vs GET
-Read about ref and populate 
-Create GEt /user/request/received with all the checks
-Create GET GET /user/connections
+- write code with proper validations for the POST /request/review/:status/:requestId
+- Thought process -POST vs GET
+- Read about ref and populate 
+- Create GEt /user/request/received with all the checks
+- Create GET GET /user/connections
+
+
+<!-- Ep-14 Building Feed API & Pagination -->
+
+- Logic for GET/feed API
+- Explore the $nin, $and, $ne and other query operators
+- Pagination
+- /user/feed?page=1&limit=20
