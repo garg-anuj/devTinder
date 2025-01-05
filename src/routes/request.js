@@ -80,14 +80,47 @@ requestRouter.post(
       kon usme interested hai   
     5  connectionRequest ke collection me joh intreseted hai uski id(fromUserId) mil jayegi us
        id se hm user ki name - details populate karwa lenge
-    6 [accepted, rejected] (validation ) yhi do status option aa skte hai     
+    6 [accepted, rejected] (validation ) yhi do status option aa skte hai   
+    
+    validation : requestId to koi si bhi hoo skti hai isliye hm match krenge ki yeah requestId 
+    ke toUserId me authenticate userKi id hai yaa nhi mathc krti haii yaa nhi usi se find krenge
 */
 
 requestRouter.post(
-  "/request/send/:status/:requestId",
+  "/request/review/:status/:requestId",
   userAuth,
   async (req, res) => {
     try {
+      const allowStatus = ["accepted", "rejected"];
+      const requestId = req.params.requestId; //connectionId apiLevel validation kro check coorectMongoose id and present hai yaa nhi
+      const loggedUser = req.users._id;
+      const status = req.params.status;
+
+      const isValidStatus = allowStatus.includes(status);
+      if (!isValidStatus) {
+        throw new Error("Status Is INVALID");
+      }
+
+      const userConnectionRequest = await ConnectionRequestsModel.findOne({
+        _id: requestId,
+        toUserId: loggedUser,
+        status: "interested",
+      })
+        .populate("fromUserId", "firstName")
+        .populate("toUserId", "firstName");
+
+      if (!userConnectionRequest) {
+        throw new Error(
+          "Request not found or you are not authorized to modify it"
+        );
+      }
+
+      userConnectionRequest.status = status;
+      await userConnectionRequest.save();
+
+      console.log(userConnectionRequest);
+
+      res.json({ message: "request progress", data: userConnectionRequest });
     } catch (err) {
       res.send("ERROR " + err.message);
     }

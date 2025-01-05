@@ -24,4 +24,5 @@ GET     /user/requests/interested
 GET     /user/requests/ignored
 GET     /user/requests/accepted
 GET     /user/requests/rejected
+GET     /user/feed  - Gets You the profiles of other users on platform
 

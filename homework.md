@@ -128,3 +128,12 @@ why do we need indexes DB?
 what is the advantage and disadvantage of creating?
 Read this article about compound indexes
 Always Think about CORNER cases
+
+
+<!-- Ep-13 Ref, Populate & Thought Process of writing APIs -->
+
+write code with proper validations for the POST /request/review/:status/:requestId
+Thought process -POST vs GET
+Read about ref and populate 
+Create GEt /user/request/received with all the checks
+Create GET GET /user/connections
