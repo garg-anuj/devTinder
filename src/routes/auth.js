@@ -73,7 +73,9 @@ authRouter.post("/logout", (req, res) => {
   try {
     res.cookie("myTokenKey", null, {
       expires: new Date(0),
-      // httpOnly: true, // Optional: Ensures cookie is only accessible by the server
+      // httpOnly: true, // Optional: Ensures cookie is only accessible by the server // Ensure security
+      // sameSite: "strict", // Match SameSite policy
+      // path: "/", // Match path where it was set
     });
     res.status(200).send("Logout Successfully");
   } catch (err) {
