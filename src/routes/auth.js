@@ -48,23 +48,37 @@ authRouter.post("/login", async (req, res) => {
           res.cookie("myTokenKey", token, {
             expires: new Date(Date.now() + 24 * 3600000),
           });
-          res.send("You can Login The plain text matches the hash!");
+          res.json({
+            success: true,
+            message: "You can Login The plain text matches the hash!",
+            data: isUserExist,
+          });
         } else {
-          res.send("Wrong password plz check");
+          res.status(401).json({
+            success: false,
+            message: "Wrong credentials plz check",
+          });
         }
       });
     }
   } catch (err) {
-    res.status(400).send("Error while login " + err.message);
+    res.status(400).json({
+      success: false,
+      message: "Error while login " + err.message,
+    });
   }
 });
 
 authRouter.post("/logout", (req, res) => {
-  res.cookie("myTokenKey", null, {
-    expires: new Date(0),
-    // httpOnly: true, // Optional: Ensures cookie is only accessible by the server
-  });
-  res.status(200).send("Logout Successfully");
+  try {
+    res.cookie("myTokenKey", null, {
+      expires: new Date(0),
+      // httpOnly: true, // Optional: Ensures cookie is only accessible by the server
+    });
+    res.status(200).send("Logout Successfully");
+  } catch (err) {
+    res.send("SERVER ERROR");
+  }
 });
 
 module.exports = authRouter;
