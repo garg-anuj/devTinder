@@ -5,6 +5,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const { connectDB } = require("./config/database");
 const { userAuth } = require("./middlewares/auth");
+const cors = require("cors");
 
 const authRouter = require("./routes/auth");
 const testUserRouter = require("./routes/testUser");
@@ -12,6 +13,21 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 
+const allowedOrigins = ["http://localhost:5173", "http://localhost:3000/login"];
+const corsOptions = {
+  // origin: true or "http://localhost:5173",
+  // origin: (origin, callback) => {
+  //   if (allowedOrigins.includes(origin)) {
+  //     callback(null, true);
+  //   } else {
+  //     callback(new Error("Not allowed by CORS"));
+  //   }
+  // },
+  origin: true,
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 /*
