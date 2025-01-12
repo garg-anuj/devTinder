@@ -16,7 +16,11 @@ const userAuth = async (req, res, next) => {
   try {
     const cookie = req.cookies.myTokenKey;
     if (!cookie) {
-      throw new Error("you have to login / signUp");
+      // throw new Error("you have to login / signUp");
+      return res.status(401).send({
+        success: false,
+        message: "Please Login!",
+      });
     }
 
     const decodedObj = jwt.verify(cookie, PRIVATE_KEY);
@@ -24,7 +28,11 @@ const userAuth = async (req, res, next) => {
 
     const user = await User.findById(_id);
     if (!user) {
-      throw new Error("User No Found");
+      // throw new Error("User No Found");
+      res.status(404).json({
+        success: false,
+        message: "User No Found",
+      });
     }
 
     req.users = user; // iise hm req.user ke anadar data store karwa denge jiise ki nextRouteHandler me hm yeah data get kar paye cookie kaa decoded data
@@ -32,7 +40,10 @@ const userAuth = async (req, res, next) => {
     // req.newToken = isUserTokenValid;
     next();
   } catch (err) {
-    res.send("Something is Wrong " + err.message);
+    res.json({
+      success: false,
+      message: "Something is Wrong " + err.message,
+    });
   }
 };
 
