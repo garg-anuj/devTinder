@@ -48,9 +48,8 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     // res.send(loggedUserUpdated);
 
     // !METHOD 2  //Not underStand this MEthod not working properly for me
-    Object.keys(loggedUser).forEach(
-      (key) => (loggedUser[key] = req.body[key] || loggedUser[key])
-    );
+    // Object.keys(loggedUser) yeah glt tha  iski jge body me hai uski keys ayegi
+    Object.keys(req.body).forEach((key) => (loggedUser[key] = req.body[key]));
 
     await loggedUser.save();
 
@@ -86,12 +85,13 @@ async function validateProfileEditData(req) {
     throw new Error("First Name should be between 5 - 70 words");
   } else if (age <= 14 || age >= 70) {
     throw new Error("age should be between 14 to 70 ");
-  } else if (skills.length > 10) {
+  } else if (skills && skills.length > 10) {
     throw new Error("Skills should be between 1 to 10 ");
   }
   //   else if (!validator.isURL(photoUrl)) {
   //     throw new Error("Invalid Photo URL");
   //   }
   //   return isFieldEditable;
+  console.log(user);
   return user;
 }
