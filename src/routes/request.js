@@ -118,8 +118,6 @@ requestRouter.post(
       userConnectionRequest.status = status;
       await userConnectionRequest.save();
 
-      console.log(userConnectionRequest);
-
       res.json({ message: "request progress", data: userConnectionRequest });
     } catch (err) {
       res.send("ERROR " + err.message);

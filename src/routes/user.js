@@ -24,18 +24,26 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
     const loggedUser = req.users._id;
 
     const userConnections = await ConnectionRequestsModel.find({
-      $or: [{ toUserId: loggedUser }, { fromUserId: loggedUser }],
-      //   $or: [{ status: "interested" }, { status: "accepted" }],
+      $or: [
+        {
+          toUserId: loggedUser, // $or: [{ status: "accepted" }, { status: "interested" }],
+        },
+        {
+          fromUserId: loggedUser, // $or: [{ status: "accepted" }, { status: "interested" }],
+        },
+      ],
+      status: "accepted",
     })
       .populate("fromUserId", POPULATE_FIELDS)
       .populate("toUserId", POPULATE_FIELDS);
 
-    const data = userConnections.map((data) => {
-      const { status, toUserId, fromUserId } = data;
-      if (data.toUserId._id.equals(loggedUser)) {
+    const data = userConnections.map((userConnection) => {
+      const { status, toUserId, fromUserId } = userConnection;
+
+      if (userConnection.toUserId._id.equals(loggedUser)) {
         return { fromUserId, status };
       }
-      if (data.fromUserId._id.toString() === loggedUser.toString()) {
+      if (userConnection.fromUserId._id.toString() === loggedUser.toString()) {
         return { toUserId, status };
       }
     });
