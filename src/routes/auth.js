@@ -48,7 +48,7 @@ authRouter.post("/login", async (req, res) => {
         if (err) {
           throw new Error("Error comparing hash:");
         } else if (isMatch) {
-          // const token = jwt.sign({ _id: isUserExist._id }, PRIVATE_KEY, {expiresIn: "1d"});
+          // const token = jwt.sign({ _id: isUserExist._id }, process.env.PRIVATE_KEY, {expiresIn: "1d"});
           const token = await isUserExist.getJWT(); //offloaded this logic into the schema
 
           // Adds the token to cookies ans send the response back to user

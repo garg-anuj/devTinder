@@ -11,7 +11,7 @@ const isAdminAuthorized = (req, res, next) => {
   }
 };
 
-const PRIVATE_KEY = "HELLO";
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const userAuth = async (req, res, next) => {
   try {
     const cookie = req.cookies.myTokenKey;

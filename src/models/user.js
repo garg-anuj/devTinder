@@ -100,7 +100,7 @@ const userSchema = new mongoose.Schema(
 
 //  schema tell you what type of data user storing data into your database
 
-const PRIVATE_KEY = "HELLO";
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 userSchema.methods.getJWT = async function () {
   // const user = this;

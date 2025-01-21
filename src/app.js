@@ -1,17 +1,20 @@
 // ! Never Trust req.body isme kuch bhi vurnable aa skta hai
 const express = require("express");
-const PORT = 3000;
 const app = express();
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+require("dotenv").config();
+
 const { connectDB } = require("./config/database");
 const { userAuth } = require("./middlewares/auth");
-const cors = require("cors");
 
 const authRouter = require("./routes/auth");
 const testUserRouter = require("./routes/testUser");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
+
+const PORT = process.env.PORT;
 
 const allowedOrigins = ["http://localhost:5173", "http://localhost:3000/login"];
 const corsOptions = {
