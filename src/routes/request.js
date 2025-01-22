@@ -1,7 +1,10 @@
 const express = require("express");
+
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequestsModel = require("../models/connectionRequest");
 const User = require("../models/user");
+const sendEmail = require("../utils/ses_sendemail");
+
 const requestRouter = express.Router();
 
 // ! note down the Corner Cases
@@ -56,12 +59,17 @@ requestRouter.post(
         toUserId,
         status,
       });
+      const connectionRequestSave = await connectionRequest.save();
 
-      await connectionRequest.save();
+      const emailRes = await sendEmail.run(
+        `A new friend request from ${fromUserFirstName}`,
+        `${fromUserFirstName} is ${status} in ${toUserFirstName}`
+      );
+
       //   res.send("request sending ");
       res.json({
         message: "request has been send successfully",
-        data: connectionRequest,
+        data: connectionRequestSave,
       });
     } catch (err) {
       res.send("ERROR " + err.message);
