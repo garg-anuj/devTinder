@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const { connectDB } = require("./config/database");
 const { userAuth } = require("./middlewares/auth");
+require("./utils/cronJob");
 
 const authRouter = require("./routes/auth");
 const testUserRouter = require("./routes/testUser");

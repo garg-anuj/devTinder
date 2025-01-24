@@ -1,0 +1,12 @@
+const USER_STATUS = {
+  INTERESTED: "interested",
+  IGNORED: "ignored",
+  ACCEPTED: "accepted",
+  REJECTED: "rejected",
+};
+
+const { INTERESTED, IGNORED, ACCEPTED, REJECTED } = USER_STATUS;
+
+const ALL_USER_STATUS = [INTERESTED, IGNORED, ACCEPTED, REJECTED];
+
+module.exports = { USER_STATUS, ALL_USER_STATUS };

@@ -3,7 +3,7 @@ const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequestsModel = require("../models/connectionRequest");
 const User = require("../models/user");
-const sendEmail = require("../utils/ses_sendemail");
+const sendEmail = require("../utils/ses_sendEmail");
 
 const requestRouter = express.Router();
 

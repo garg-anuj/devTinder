@@ -1,5 +1,5 @@
 const { SendEmailCommand } = require("@aws-sdk/client-ses");
-const { sesClient } = require("../utils/sesClient");
+const { sesClient } = require("./sesClient");
 
 // Load the AWS SDK for Node.js
 // Set the region
